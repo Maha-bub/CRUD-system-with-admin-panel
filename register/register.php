@@ -1,35 +1,73 @@
 <?php
 include_once "../database_config.php";
 
- if(isset($_POST['register'])){
-  $fullName=$_POST['full_name'];
-  $userName=$_POST['username'];
-  $email=$_POST['email'];
-  $pass=$_POST['password'];
-  $retype_pass=$_POST['re_password'];
+$message = "";
+$messageType = "";
 
+if(isset($_POST['register'])){
 
+    $fullName = trim($_POST['full_name']);
+    $userName = trim($_POST['username']);
+    $email    = trim($_POST['email']);
+    $pass     = $_POST['password'];
+    $repass   = $_POST['re_password'];
 
+    // Empty check
+    if(empty($fullName) || empty($userName) || empty($email) || empty($pass)){
+        $message = "All fields are required!";
+        $messageType = "error";
+    }
 
- if($pass !==$retype_pass){
-  echo "Password does match!";
- }else{
-  // hash password for ensure security concern
+    // Email validation
+    elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $message = "Invalid email format!";
+        $messageType = "error";
+    }
 
-  $encrypted_password=password_hash($pass,PASSWORD_DEFAULT);
-  
-  $insert_query="INSERT INTO register_info (full_name, user_name, email,encrypted_password) values('$fullName','$userName','$email','$encrypted_password')";
+    // Password match
+    elseif($pass !== $repass){
+        $message = "Passwords do not match!";
+        $messageType = "error";
+    }
 
-  if($database->query($insert_query)){
-    echo "Congratulations Your Registration Successfull!";
+    // Password strength
+    elseif(strlen($pass) < 8 || !preg_match("/[0-9]/", $pass) || !preg_match("/[A-Za-z]/", $pass)){
+        $message = "Password must be 8+ chars with letters & numbers!";
+        $messageType = "error";
+    }
 
-  }else{
-    echo"Registration Failed:".$database->error;
-  }
- }
+    else {
+
+        // Email duplicate check
+        $check = $database->prepare("SELECT id FROM register_info WHERE email = ?");
+        $check->bind_param("s", $email);
+        $check->execute();
+        $result = $check->get_result();
+
+        if($result->num_rows > 0){
+            $message = "Email already exists!";
+            $messageType = "error";
+        } else {
+
+            $encrypted_password = password_hash($pass, PASSWORD_DEFAULT);
+
+            $stmt = $database->prepare("
+                INSERT INTO register_info (full_name, user_name, email, encrypted_password)
+                VALUES (?, ?, ?, ?)
+            ");
+
+            $stmt->bind_param("ssss", $fullName, $userName, $email, $encrypted_password);
+
+            if($stmt->execute()){
+                $message = "🎉 Registration Successful!";
+                $messageType = "success";
+            } else {
+                $message = "Registration Failed!";
+                $messageType = "error";
+            }
+        }
+    }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,11 +84,13 @@ include_once "../database_config.php";
 
 <div class="card">
 
+
     <?php if(!empty($message)): ?>
-        <div class="alert alert-<?php echo $messageType; ?>">
+        <div class="alert <?php echo $messageType; ?>">
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
+
 
     <div class="brand">CRUD <span>SYSTEM</span></div>
     <p class="subtitle">Create your account</p>
