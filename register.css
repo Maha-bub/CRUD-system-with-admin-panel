@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --ink: #1a1a2e;
+    --accent: #e8734a;
+    --accent2: #5b8dee;
+    --surface: #fff;
+    --muted: #f4f3ef;
+    --border: #ddd9d0;
+    --error: #d64045;
+    --success: #2e7d52;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background: var(--surface);
+    width: 100%;
+    max-width: 520px;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--ink);
+}
+
+.brand span {
+    color: var(--accent);
+}
+
+.subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.field-row {
+    display: flex;
+    gap: 10px;
+}
+
+.field {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 0.8rem;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+}
+
+input:focus {
+    border-color: var(--accent2);
+    outline: none;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.alert-error {
+    background: #fdf0f0;
+    color: var(--error);
+}
+
+.alert-success {
+    background: #edf7f1;
+    color: var(--success);
+}
+
+.switch {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
+
+.card {
+    background:
+        var(--surface);
+    width: 100%;
+    max-width: 560px;
+    border-radius: 24px;
+    padding: 48px 44px;
+    box-shadow: 0 24px 80px rgba(26, 26, 46, 0.12);
+    animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
