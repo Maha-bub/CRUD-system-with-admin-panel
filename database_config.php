@@ -1,6 +1,6 @@
 <?php
 $database=new mysqli("localhost","root", "","CrudSystem"); 
-if(!database){
+if(!$database){
     die("Connection failed!".$database->connect-error);
 }
 
