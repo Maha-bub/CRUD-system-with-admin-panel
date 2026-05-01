@@ -1,4 +1,52 @@
+<?php
+session_start();
+include_once "../database_config.php";
 
+$message = "";
+$messageType = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+
+    if(empty($username) || empty($password)){
+        $message = "All fields required!";
+        $messageType = "error";
+    } else {
+
+        // Secure query
+        $stmt = $database->prepare("SELECT * FROM register_info WHERE user_name = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+
+            $user = $result->fetch_assoc();
+
+            // 🔴 IMPORTANT FIX (no hashing here)
+            if (password_verify($password, $user['encrypted_password'])) {
+
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['user_name'];
+
+                header("Location: ../admin_dashboard/index.php");
+                exit();
+
+            } else {
+                $message = "Wrong password!";
+                $messageType = "error";
+            }
+
+        } else {
+            $message = "User not found!";
+            $messageType = "error";
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
