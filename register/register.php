@@ -1,5 +1,13 @@
 <?php
-$database=new mysqli("localhost","root", "","CrudSystem");
+include_once "database_config.php";
+
+ if(isset($_POST['register'])){
+  $fullName=$_POST['full_name'];
+  $userName=$_POST['username'];
+  $email=$_POST['email'];
+  $pass=$_POST['password'];
+  $retype_pass=['re_password'];
+ }
 
 
 ?>
@@ -48,7 +56,7 @@ $database=new mysqli("localhost","root", "","CrudSystem");
       </div>
     </div>
 
-    <button type="submit" class="btn">Create Account</button>
+    <button type="submit" class="btn" name="register">Create Account</button>
   </form>
 
   <div class="switch">
