@@ -1,3 +1,8 @@
+<?php
+$database=new mysqli("localhost","root", "","CrudSystem");
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
