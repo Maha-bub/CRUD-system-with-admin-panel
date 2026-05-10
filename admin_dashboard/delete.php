@@ -1,7 +1,4 @@
 <?php
-// =============================================
-//  delete.php — Delete a Product (no HTML)
-// =============================================
 include 'db.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -23,7 +20,6 @@ if (!empty($product['image']) && file_exists("uploads/" . $product['image'])) {
     unlink("uploads/" . $product['image']);
 }
 
-// Delete from DB
 if (mysqli_query($conn, "DELETE FROM products WHERE id = $id")) {
     header("Location: view.php?msg=Product deleted successfully!&type=success");
 } else {
